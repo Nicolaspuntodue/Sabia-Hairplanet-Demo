@@ -6,16 +6,27 @@
     <title>Sabia Hair Planet | Parrucchiera a Pescara</title>
     <meta
       name="description"
-      content="Sabia Hair Planet, via Raffaello Sanzio 13 a Pescara. Taglio, colore, styling ed extensions Great Lengths, con l'esperienza dei backstage delle fashion week."
+      content="Sabia Hair Planet, via Raffaello Sanzio 13 a Pescara. Taglio, colore, piega, styling ed extensions Great Lengths, con l'esperienza dei backstage delle fashion week."
     />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#eeedea" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" as="image" href="/img/backstage.webp" />
+    <link rel="preload" as="image" href="/img/hero.webp" imagesrcset="/img/hero-800.webp 800w, /img/hero.webp 1600w" imagesizes="100vw" fetchpriority="high" />
   </head>
-  <body>
-    <canvas id="planet" aria-hidden="true"></canvas>
+  <body class="is-loading">
+    <!-- loader: ciocche sottili che convergono, come un pennello -->
+    <div class="loader" aria-hidden="true">
+      <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+        <path d="M200 300 C 190 200, 90 120, -20 90" />
+        <path d="M200 300 C 195 190, 140 80, 60 -10" />
+        <path d="M200 300 C 200 180, 190 60, 170 -20" />
+        <path d="M200 300 C 205 180, 240 70, 300 -10" />
+        <path d="M200 300 C 210 200, 300 110, 420 60" />
+        <path d="M200 300 C 205 220, 330 170, 430 160" />
+        <path d="M200 300 C 195 220, 70 180, -30 170" />
+      </svg>
+    </div>
     <div class="grain" aria-hidden="true"></div>
 
     <header class="nav" id="nav">
@@ -28,33 +39,58 @@
           <li><a href="#backstage">Backstage</a></li>
           <li><a href="#servizi">Servizi</a></li>
           <li><a href="#extensions">Extensions</a></li>
-          <li><a href="#salone">Salone</a></li>
+          <li><a href="#salone">Il salone</a></li>
         </ul>
       </nav>
       <a class="btn btn--solid btn--sm" href="#visita">Prenota</a>
     </header>
 
     <main id="top">
-      <!-- HERO -->
-      <section class="hero" id="hero">
-        <div class="hero__copy">
-          <p class="eyebrow">Parrucchiera a Pescara</p>
-          <h1 class="hero__title">
-            <span class="line"><span class="split">Sabia</span></span>
-            <span class="line line--italic"><span class="split">Hair Planet</span></span>
-          </h1>
-          <p class="hero__lead">
-            Dai backstage delle fashion week di Milano e Londra al tuo specchio, in via Raffaello a Pescara.
-          </p>
-          <div class="hero__cta">
-            <a class="btn btn--solid" href="#visita">Prenota</a>
-            <a class="btn btn--ghost" href="#backstage">Il backstage</a>
+      <div class="intro">
+        <!-- HERO -->
+        <section class="hero" id="hero">
+          <picture class="hero__bg">
+            <img
+              src="/img/hero.webp"
+              srcset="/img/hero-800.webp 800w, /img/hero.webp 1600w"
+              sizes="100vw"
+              width="1600"
+              height="900"
+              alt="Donna sorridente con lunghissimi capelli castani lucidi"
+              fetchpriority="high"
+            />
+          </picture>
+          <div class="hero__copy">
+            <h1 class="hero__title">
+              <span class="line"><span class="split">Sabia</span></span>
+              <span class="line line--italic"><span class="split">Hair Planet</span></span>
+            </h1>
+            <p class="hero__lead">Dai backstage delle fashion week di Milano e Londra al tuo specchio, in via Raffaello a Pescara.</p>
+            <div class="hero__cta">
+              <a class="btn btn--solid" href="#visita">Prenota</a>
+              <a class="btn btn--ghost" href="#servizi">I servizi</a>
+            </div>
           </div>
-        </div>
-        <figure class="hero__photo">
-          <img src="/img/backstage.webp" width="1536" height="2048" alt="Una hairstylist sistema un raccolto scolpito a una modella nel backstage di una sfilata" fetchpriority="high" />
-        </figure>
-      </section>
+          <a class="hero__card" href="#backstage">
+            <img src="/img/passerella-800.webp" width="800" height="1066" alt="" />
+            <span>Dal backstage<i class="ph ph-arrow-down-right" aria-hidden="true"></i></span>
+          </a>
+        </section>
+
+        <!-- LA PIASTRA: card che sale e si apre, la piastra 3D liscia una ciocca -->
+        <section class="stage" id="piega" aria-label="La piega perfetta">
+          <div class="stage__card">
+            <span class="stage__word" aria-hidden="true">Sabia</span>
+            <canvas class="stage__canvas" aria-hidden="true"></canvas>
+            <div class="stage__copy stage__copy--a">
+              <h2 class="display">Liscio a specchio,<br /><em>ciocca per ciocca.</em></h2>
+            </div>
+            <div class="stage__copy stage__copy--b">
+              <p>La precisione dei backstage, ogni giorno in salone. Piega, liscio e onde che durano, con il calore giusto per ogni capello.</p>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <!-- MANIFESTO -->
       <section class="manifesto" id="manifesto" aria-label="La filosofia del salone">
@@ -63,17 +99,16 @@
         </p>
       </section>
 
-      <!-- BACKSTAGE, horizontal pan -->
+      <!-- BACKSTAGE, scorrimento orizzontale -->
       <section class="backstage" id="backstage">
         <div class="backstage__track">
           <div class="panel panel--intro">
+            <p class="eyebrow">Fashion week</p>
             <h2 class="display">Il backstage<br /><em>è la nostra scuola.</em></h2>
-            <p class="body">
-              La titolare partecipa attivamente alle fashion week, da Milano a Londra. Tecniche, tempi e tendenze arrivano in salone di prima mano.
-            </p>
+            <p class="body">La titolare partecipa attivamente alle fashion week, da Milano a Londra. Tecniche, tempi e tendenze arrivano in salone di prima mano.</p>
           </div>
           <figure class="panel panel--photo">
-            <img src="/img/backstage.webp" width="1536" height="2048" loading="lazy" alt="Preparazione delle acconciature nel backstage prima della sfilata" />
+            <img src="/img/backstage.webp" srcset="/img/backstage-800.webp 800w, /img/backstage.webp 1100w" sizes="(max-width: 767px) 92vw, 50vh" width="1100" height="1467" loading="lazy" alt="Hairstylist con il pettine tra i denti rifinisce lo chignon di una modella allo specchio del backstage" />
           </figure>
           <div class="panel panel--cities" aria-label="Le città delle sfilate">
             <span class="city">Milano</span>
@@ -81,39 +116,40 @@
             <span class="city">Pescara</span>
           </div>
           <figure class="panel panel--photo panel--tall">
-            <img src="/img/runway.webp" width="1536" height="2048" loading="lazy" alt="Modella in passerella con una treccia lucida e un look nero sartoriale" />
+            <img src="/img/backstage-onde.webp" srcset="/img/backstage-onde-800.webp 800w, /img/backstage-onde.webp 1100w" sizes="(max-width: 767px) 92vw, 60vh" width="1100" height="1467" loading="lazy" alt="Mani che modellano onde scolpite sui capelli di una modella, in bianco e nero" />
+          </figure>
+          <figure class="panel panel--photo">
+            <img src="/img/coda.webp" srcset="/img/coda-800.webp 800w, /img/coda.webp 1100w" sizes="(max-width: 767px) 92vw, 50vh" width="1100" height="1290" loading="lazy" alt="Modella in passerella con una lunghissima coda lucida in movimento" />
           </figure>
           <div class="panel panel--note">
-            <p class="display display--sm">
-              Visto in passerella,<br />pensato per la vita vera.
-            </p>
+            <p class="display display--sm">Visto in passerella,<br />pensato per la vita vera.</p>
           </div>
         </div>
       </section>
 
-      <!-- SERVIZI, sticky stack -->
+      <!-- SERVIZI, card impilate -->
       <section class="servizi" id="servizi">
         <h2 class="display servizi__title">Servizi</h2>
         <div class="stack">
           <article class="stack__card">
-            <div class="stack__media"><img src="/img/taglio.webp" width="1536" height="2048" loading="lazy" alt="Mani della parrucchiera con pettine e forbici durante un taglio di precisione" /></div>
+            <div class="stack__media"><img src="/img/taglio.webp" srcset="/img/taglio-800.webp 800w, /img/taglio.webp 1100w" sizes="(max-width: 767px) 92vw, 42vw" width="1100" height="1467" loading="lazy" alt="Parrucchiera che esegue un taglio netto sui capelli lunghi di una cliente davanti allo specchio" /></div>
             <div class="stack__body">
               <h3>Taglio</h3>
-              <p>Linee pulite, studiate sulla forma del viso e sulla texture del capello. Un taglio che resta bello anche a casa.</p>
+              <p>Linee pulite, studiate sulla forma del viso e sulla natura del capello. Un taglio che resta bello anche a casa.</p>
             </div>
           </article>
           <article class="stack__card">
-            <div class="stack__media"><img src="/img/bob.webp" width="1536" height="2048" loading="lazy" alt="Ritratto di donna con un bob netto color bordeaux" /></div>
+            <div class="stack__media"><img src="/img/colore.webp" srcset="/img/colore-800.webp 800w, /img/colore.webp 1100w" sizes="(max-width: 767px) 92vw, 42vw" width="1100" height="1467" loading="lazy" alt="Ritratto di donna con un bob lucido color ciliegia bordeaux" /></div>
             <div class="stack__body">
               <h3>Colore</h3>
               <p>Dai naturali alle nuance di tendenza viste in passerella. Colore su misura, lucido e rispettoso della fibra.</p>
             </div>
           </article>
           <article class="stack__card">
-            <div class="stack__media"><img src="/img/runway.webp" width="1536" height="2048" loading="lazy" alt="Treccia lucida da sfilata vista di spalle" /></div>
+            <div class="stack__media"><img src="/img/styling.webp" srcset="/img/styling-800.webp 800w, /img/styling.webp 1100w" sizes="(max-width: 767px) 92vw, 42vw" width="1100" height="1467" loading="lazy" alt="Chignon basso ed elegante con piccole perle tra i capelli" /></div>
             <div class="stack__body">
-              <h3>Styling e acconciature</h3>
-              <p>Raccolti, onde e look da evento con la precisione del backstage. Per cerimonie, serate e shooting.</p>
+              <h3>Piega e acconciature</h3>
+              <p>Raccolti, onde e look da cerimonia con la cura del backstage. Per matrimoni, serate ed eventi.</p>
             </div>
           </article>
         </div>
@@ -124,20 +160,18 @@
         <div class="extensions__copy">
           <p class="eyebrow">Salone certificato</p>
           <h2 class="display">Extensions<br /><em>Great Lengths.</em></h2>
-          <p class="body">
-            Capelli veri, applicati da un'applicatrice certificata Great Lengths. Lunghezza e volume che si muovono come i tuoi, senza compromessi.
-          </p>
+          <p class="body">Capelli veri, applicati da un'applicatrice certificata Great Lengths. Lunghezza e volume che si muovono come i tuoi, senza compromessi.</p>
           <a class="btn btn--ghost" href="#visita">Chiedi una consulenza</a>
         </div>
         <figure class="extensions__photo">
-          <img src="/img/extensions.webp" width="1536" height="2048" loading="lazy" alt="Capelli lunghissimi, lucidi e castani in movimento" />
+          <img src="/img/extensions.webp" srcset="/img/extensions-800.webp 800w, /img/extensions.webp 1024w" sizes="(max-width: 767px) 92vw, 460px" width="1024" height="1152" loading="lazy" alt="Capelli lunghissimi, lisci e lucidi, con un riflesso di luce che li attraversa" />
         </figure>
       </section>
 
       <!-- SALONE -->
       <section class="salone" id="salone">
         <figure class="salone__frame">
-          <img src="/img/salone.webp" width="1600" height="900" loading="lazy" alt="Interno del salone con poltrone nere, specchi e una panca in velluto bordeaux" />
+          <img src="/img/salone.webp" srcset="/img/salone-800.webp 800w, /img/salone.webp 1600w" sizes="100vw" width="1600" height="900" loading="lazy" alt="Il salone: poltrone nere, specchi, divano in velluto bordeaux e una finestra sul mare" />
         </figure>
         <div class="salone__caption">
           <h2 class="display">Un pianeta tutto tuo,<br /><em>a due passi dal mare.</em></h2>
@@ -181,7 +215,7 @@
       <p class="footer__mark">Sabia <em>Hair Planet</em></p>
       <p>Via Raffaello Sanzio 13, Pescara</p>
       <p>Salone accessibile in sedia a rotelle</p>
-      <p class="footer__demo">Demo concept. Immagini generate a scopo illustrativo.</p>
+      <p class="footer__demo">Demo di concept. Immagini generate a scopo illustrativo.</p>
     </footer>
 
     <script type="module" src="/src/main.js"></script>

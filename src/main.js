@@ -1,36 +1,63 @@
 import '@fontsource-variable/bodoni-moda/opsz.css';
 import '@fontsource-variable/bodoni-moda/opsz-italic.css';
 import '@fontsource-variable/jost/wght.css';
-import '@phosphor-icons/web/regular';
 import './style.css';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { createPlanet } from './planet.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mobile = window.matchMedia('(max-width: 767px)').matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-/* ---------- WebGL planet ---------- */
+/* ---------- icone Phosphor (SVG ufficiali, solo quelle usate) ---------- */
 
-let planet = null;
-try {
-  planet = createPlanet($('#planet'), { reduced });
-} catch (err) {
-  // no WebGL: the page still works, only the planet is missing
-  $('#planet').remove();
-  console.warn('WebGL non disponibile', err);
+const icons = import.meta.glob(
+  '/node_modules/@phosphor-icons/core/assets/regular/{map-pin,clock,calendar-check,whatsapp-logo,phone,arrow-down-right}.svg',
+  { query: '?raw', import: 'default', eager: true }
+);
+$$('i.ph').forEach((el) => {
+  const name = [...el.classList].find((c) => c.startsWith('ph-')).slice(3);
+  const svg = Object.entries(icons).find(([path]) => path.endsWith(`/${name}.svg`));
+  if (svg) el.innerHTML = svg[1];
+});
+
+/* ---------- piastra 3D, caricata solo quando serve ---------- */
+
+// lo stato vive qui, così la timeline di scroll funziona anche prima che
+// Three.js sia stato scaricato
+const piastra = { enter: 0, clamp: 0, glide: 0, leave: 0 };
+const canvas = $('.stage__canvas');
+
+function loadPiastra() {
+  import('./piastra.js')
+    .then(({ createPiastra }) => createPiastra(canvas, { state: piastra, mobile, reduced }))
+    .catch((err) => {
+      // senza WebGL la pagina funziona lo stesso, manca solo la scena 3D
+      canvas.remove();
+      console.warn('WebGL non disponibile', err);
+    });
 }
 
-/* ---------- smooth scroll ---------- */
+new IntersectionObserver(
+  (entries, obs) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      obs.disconnect();
+      loadPiastra();
+    }
+  },
+  { rootMargin: '100% 0px' }
+).observe(canvas);
+
+/* ---------- scroll morbido ---------- */
 
 let lenis = null;
 if (!reduced) {
-  lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.9 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
@@ -48,7 +75,7 @@ $$('a[href^="#"]').forEach((a) => {
   });
 });
 
-/* ---------- nav ---------- */
+/* ---------- navigazione ---------- */
 
 const nav = $('#nav');
 ScrollTrigger.create({
@@ -61,7 +88,7 @@ ScrollTrigger.create({
   },
 });
 
-/* ---------- text splitting ---------- */
+/* ---------- suddivisione del testo ---------- */
 
 $$('.split').forEach((el) => {
   const text = el.textContent;
@@ -95,32 +122,58 @@ const manifesto = $('[data-words]');
   });
 }
 
-/* ---------- motion ---------- */
+/* ---------- loader e ingresso ---------- */
 
-if (!reduced) {
-  // hero entrance
-  const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  intro
-    .from('.hero__title .char', { yPercent: 115, duration: 1.4, stagger: 0.035 }, 0.15)
-    .from('.hero__photo', { clipPath: 'inset(100% 0 0 0)', duration: 1.6, ease: 'expo.inOut' }, 0)
-    .to('.hero__photo img', { scale: 1, duration: 2.2 }, 0.2)
-    .from(['.hero .eyebrow', '.hero__lead', '.hero__cta'], { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, 0.7)
+function reveal() {
+  if (!document.body.classList.contains('is-loading')) return;
+  document.body.classList.remove('is-loading');
+  if (reduced) return;
+  gsap
+    .timeline({ defaults: { ease: 'expo.out' } })
+    .from('.hero__bg img', { scale: 1.12, duration: 2.4 }, 0)
+    .from('.hero__title .char', { yPercent: 115, duration: 1.4, stagger: 0.035 }, 0.2)
+    .from(['.hero__lead', '.hero__cta'], { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, 0.7)
+    .from('.hero__card', { y: 40, opacity: 0, duration: 1.2 }, 0.8)
     .from('.nav', { y: -20, opacity: 0, duration: 1 }, 0.9);
-  if (planet) {
-    const s = planet.state;
-    s.scale = 0.2;
-    s.strandAlpha = 0;
-    intro.to(s, { scale: 0.9, strandAlpha: 1, duration: 2.4, ease: 'expo.out' }, 0.2);
-  }
+}
 
-  // hero photo drifts slower than the page
-  gsap.to('.hero__photo', {
-    yPercent: -18,
-    ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+// il loader resta il tempo dell'animazione delle ciocche, mai più di 2,2 secondi
+const heroImg = $('.hero__bg img');
+Promise.race([
+  Promise.all([
+    document.fonts.ready,
+    heroImg.decode ? heroImg.decode().catch(() => {}) : Promise.resolve(),
+    new Promise((r) => setTimeout(r, reduced ? 0 : 1300)),
+  ]),
+  new Promise((r) => setTimeout(r, 2200)),
+]).then(reveal);
+
+/* ---------- movimento ---------- */
+
+if (reduced) {
+  // stato finale statico: la piastra chiusa a metà ciocca
+  Object.assign(piastra, { enter: 1, clamp: 1, glide: 0.45, leave: 0 });
+} else {
+  // la piastra: la card sale sopra la hero, si apre a tutto schermo,
+  // la piastra si chiude sulla ciocca e la liscia dalle radici alle punte
+  const tl = gsap.timeline({
+    defaults: { ease: 'none' },
+    scrollTrigger: { trigger: '.stage', start: 'top top', end: mobile ? '+=260%' : '+=320%', pin: true, scrub: 0.8 },
   });
+  tl.to('.stage__card', { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: 1, ease: 'power2.inOut' }, 0)
+    .to('.hero', { scale: 0.92, duration: 1, ease: 'power2.inOut' }, 0)
+    .fromTo('.stage__word', { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: 'power2.out' }, 0)
+    .to(piastra, { enter: 1, duration: 1, ease: 'power2.out' }, 0.1)
+    .to(piastra, { clamp: 1, duration: 0.45, ease: 'power2.inOut' }, 1.05)
+    .to('.stage__copy--a', { opacity: 1, y: 0, duration: 0.5 }, 1.2)
+    .to(piastra, { glide: 1, duration: 2.6, ease: 'power1.inOut' }, 1.5)
+    .to('.stage__word', { yPercent: -6, duration: 2.6 }, 1.5)
+    .to(piastra, { leave: 1, duration: 0.7, ease: 'power2.inOut' }, 4.15)
+    .to('.stage__copy--b', { opacity: 1, duration: 0.5 }, 4.3)
+    .to({}, { duration: 0.3 }, 4.85);
+  gsap.set('.stage__copy--a', { y: 30 });
 
-  // manifesto: pinned, words light up one by one
+  // manifesto: fermo, le parole si accendono una alla volta
   gsap.to('.manifesto__text .w', {
     opacity: 1,
     stagger: 0.12,
@@ -130,7 +183,7 @@ if (!reduced) {
 
   const mm = gsap.matchMedia();
 
-  // backstage: vertical scroll becomes a horizontal pan (desktop and tablet)
+  // backstage: lo scroll verticale diventa uno scorrimento orizzontale (desktop e tablet)
   mm.add('(min-width: 768px)', () => {
     const track = $('.backstage__track');
     const distance = () => track.scrollWidth - window.innerWidth;
@@ -162,17 +215,15 @@ if (!reduced) {
       scrollTrigger: { trigger: '.panel--cities', containerAnimation: pan, start: 'left 80%', end: 'left 30%', scrub: true },
     });
 
-    // salone: the window opens up to the whole room
-    const salone = gsap.timeline({
-      scrollTrigger: { trigger: '.salone', start: 'top top', end: '+=120%', pin: true, scrub: 0.8 },
-    });
-    salone
+    // salone: la finestra si apre su tutta la sala
+    gsap
+      .timeline({ scrollTrigger: { trigger: '.salone', start: 'top top', end: '+=120%', pin: true, scrub: 0.8 } })
       .fromTo('.salone__frame', { clipPath: 'inset(24% 27% 24% 27%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.inOut', duration: 1 })
       .fromTo('.salone__frame img', { scale: 1.25 }, { scale: 1, ease: 'power2.inOut', duration: 1 }, 0)
       .to('.salone__caption', { opacity: 1, duration: 0.3 }, 0.75);
   });
 
-  // servizi: real sticky stack, the previous card recedes as the next arrives
+  // servizi: card impilate, la precedente arretra quando arriva la successiva
   const cards = $$('.stack__card');
   cards.forEach((card, i) => {
     if (i === cards.length - 1) return;
@@ -183,14 +234,14 @@ if (!reduced) {
     });
   });
 
-  // extensions: the real hair unrolls downward, over the falling strands
+  // extensions: la foto si srotola verso il basso, come una ciocca lunga
   gsap.to('.extensions__photo', {
     clipPath: 'inset(0 0 0% 0)',
     ease: 'power2.inOut',
-    scrollTrigger: { trigger: '.extensions', start: 'top 35%', end: 'center 40%', scrub: 0.8 },
+    scrollTrigger: { trigger: '.extensions', start: 'top 70%', end: 'center 45%', scrub: 0.8 },
   });
 
-  // gentle reveal for section headings (hierarchy, once)
+  // comparsa leggera dei titoli (gerarchia, una volta sola)
   $$('.servizi__title, .visita__title, .extensions__copy > *, .info').forEach((el) => {
     gsap.from(el, {
       y: 40,
@@ -199,40 +250,6 @@ if (!reduced) {
       ease: 'expo.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });
-  });
-}
-
-/* ---------- planet story, keyed to sections ---------- */
-
-if (planet && !reduced) {
-  const s = planet.state;
-  // one keyframe per section; each blends in while its section rises into view
-  const keys = [
-    ['.hero', { x: 0.9, y: 0.55, scale: 0.9, tilt: 0.38, unravel: 0, planetAlpha: 1, strandAlpha: 1 }],
-    ['.manifesto', { x: 0, y: 0, scale: 1.5, tilt: 0.3, unravel: 0, planetAlpha: 0.42, strandAlpha: 0.3 }],
-    ['.backstage', { x: -0.3, y: -2.0, scale: 0.5, tilt: 0.55, unravel: 0, planetAlpha: 1, strandAlpha: 1 }],
-    ['.servizi', { x: 3.3, y: 1.7, scale: 0.45, tilt: 0.3, unravel: 0, planetAlpha: 1, strandAlpha: 1 }],
-    ['.extensions', { x: 2.5, y: 0, scale: 1, tilt: 1.0, unravel: 1, planetAlpha: 0, strandAlpha: 0.85 }],
-    ['.salone', { x: 0, y: 0, scale: 0.6, tilt: 1.2, unravel: 0, planetAlpha: 0, strandAlpha: 0 }],
-    ['.visita', { x: 2.9, y: 1.75, scale: 0.5, tilt: 0.42, unravel: 0, planetAlpha: 1, strandAlpha: 1 }],
-  ];
-  const base = keys[0][1];
-  const triggers = keys.slice(1).map(([sel]) =>
-    ScrollTrigger.create({ trigger: sel, start: 'top bottom', end: 'top 20%' })
-  );
-  const ease = gsap.parseEase('power2.inOut');
-
-  gsap.ticker.add(() => {
-    const out = { ...base };
-    triggers.forEach((st, i) => {
-      const p = ease(st.progress);
-      if (p <= 0) return;
-      const k = keys[i + 1][1];
-      for (const key in out) out[key] += (k[key] - out[key]) * p;
-    });
-    // the intro tween owns scale and strandAlpha until it has finished
-    if (!gsap.isTweening(s)) Object.assign(s, out);
-    else Object.assign(s, { ...out, scale: s.scale, strandAlpha: s.strandAlpha });
   });
 }
 

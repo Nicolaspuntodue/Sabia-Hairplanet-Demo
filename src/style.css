@@ -1,9 +1,11 @@
 /*
-  Sabia Hair Planet design tokens
-  Palette: cool pearl + blue-black ink + couture bordeaux, with an iridescent
-  pearl sheen reserved for the WebGL planet and a single hover highlight.
-  Type: Bodoni Moda (opsz axis) for display, Jost for text.
-  Shape rule: images and panels are sharp (radius 0); interactive controls are full pills.
+  Sabia Hair Planet: design token
+  Palette: perla fredda + inchiostro blu-nero + bordeaux couture, con un riflesso
+  perlato iridescente riservato agli hover e alla scena 3D.
+  Tipografia: Bodoni Moda (asse opsz) per i titoli, Jost per i testi.
+  Regola delle forme: immagini e pannelli a spigolo vivo (radius 0), controlli
+  interattivi a pillola. Uniche eccezioni: la card della piastra e la card
+  della hero, arrotondate come oggetti "fisici" che si muovono sulla pagina.
 */
 
 :root {
@@ -32,8 +34,7 @@
   --max: 1400px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* z-index scale */
-  --z-canvas: 0;
+  /* scala z-index */
   --z-content: 1;
   --z-nav: 20;
   --z-grain: 30;
@@ -98,15 +99,6 @@ a {
   outline-offset: 3px;
 }
 
-#planet {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: var(--z-canvas);
-  pointer-events: none;
-}
-
 main,
 .footer {
   position: relative;
@@ -118,19 +110,18 @@ main,
   inset: 0;
   z-index: var(--z-grain);
   pointer-events: none;
-  opacity: 0.07;
+  opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
 }
 
-@media (prefers-color-scheme: dark) {
+/* la grana è un solo layer fisso senza blend mode: costa pochissimo in composizione */
+@media (max-width: 767px) {
   .grain {
-    mix-blend-mode: screen;
-    opacity: 0.05;
+    display: none;
   }
 }
 
-/* ---------- type ---------- */
+/* ---------- tipografia ---------- */
 
 .display {
   font-family: var(--font-display);
@@ -173,7 +164,21 @@ main,
   margin: 0 0 var(--s-3);
 }
 
-/* ---------- buttons ---------- */
+/* ---------- icone ---------- */
+
+.ph {
+  display: inline-flex;
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+
+.ph svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- pulsanti ---------- */
 
 .btn {
   --h: 3.25rem;
@@ -213,7 +218,7 @@ main,
   color: var(--ink);
 }
 
-/* iridescent sheen sweeps in on hover: the one place the pearl leaves the canvas */
+/* riflesso perlato che scorre al passaggio del mouse */
 .btn::after {
   content: '';
   position: absolute;
@@ -266,10 +271,25 @@ main,
 }
 
 .nav.is-scrolled {
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
+}
+
+/* il blur dietro la nav solo su desktop: su mobile è costoso durante lo scroll */
+@media (min-width: 1024px) and (hover: hover) {
+  .nav.is-scrolled {
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+}
+
+/* sopra la foto della hero la nav resta scura in entrambi i temi */
+.nav:not(.is-scrolled) {
+  color: #111116;
+}
+.nav:not(.is-scrolled) .nav__sub {
+  color: #3a3a44;
 }
 
 .nav.is-hidden {
@@ -340,21 +360,56 @@ main,
 
 /* ---------- hero ---------- */
 
+.intro {
+  position: relative;
+}
+
+/* la hero resta ferma mentre la card della piastra le sale sopra */
 .hero {
-  min-height: 100dvh;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 7rem var(--gutter) var(--s-5);
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  align-items: end;
-  gap: var(--s-5);
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 560px;
+  overflow: hidden;
+  color: #111116;
+  transform-origin: 50% 30%;
+}
+
+.hero__bg,
+.hero__bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__bg img {
+  object-fit: cover;
+  object-position: 30% 30%;
+}
+
+/* velatura perla: i capelli sfumano dove si appoggia il testo */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgb(238 237 234 / 0) 36%, rgb(238 237 234 / 0.78) 56%, rgb(238 237 234 / 0.92) 100%);
+  pointer-events: none;
+}
+
+.hero__copy {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(2.5rem, 9vh, 6rem);
+  width: min(42vw, 600px);
+  z-index: 2;
 }
 
 .hero__title {
   font-family: var(--font-display);
-  font-weight: 450;
-  font-size: clamp(3.4rem, 9vw, 9.5rem);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 7.2vw, 8rem);
   line-height: 0.92;
   letter-spacing: -0.035em;
   margin: 0;
@@ -370,7 +425,7 @@ main,
   line-height: 1.1;
   padding-bottom: 0.14em;
   margin-top: -0.12em;
-  padding-left: 0.6em;
+  padding-left: 0.5em;
 }
 
 .hero__title .word {
@@ -380,14 +435,13 @@ main,
 
 .hero__title .char {
   display: inline-block;
-  will-change: transform;
 }
 
 .hero__lead {
-  max-width: 36ch;
-  color: var(--ink-2);
-  font-size: 1.15rem;
-  margin: var(--s-4) 0 var(--s-4);
+  max-width: 34ch;
+  color: #1d1d24;
+  font-size: 1.12rem;
+  margin: var(--s-3) 0 var(--s-4);
 }
 
 .hero__cta {
@@ -396,38 +450,216 @@ main,
   gap: var(--s-2);
 }
 
-.hero__photo {
-  align-self: center;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  clip-path: inset(0 0 0 0);
-  max-height: 72dvh;
-  justify-self: end;
-  width: 100%;
-  max-width: 420px;
-  margin-top: var(--s-5);
+.hero .btn--ghost {
+  border-color: #111116;
+  color: #111116;
 }
 
-.hero__photo img {
+/* piccola card in basso a sinistra, come un'anteprima video */
+.hero__card {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(2.5rem, 9vh, 6rem);
+  width: 170px;
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  overflow: hidden;
+  color: #f7f6f3;
+  text-decoration: none;
+  box-shadow: 0 20px 50px -20px rgb(17 17 22 / 0.45);
+  transition: transform 0.5s var(--ease);
+  z-index: 2;
+}
+
+.hero__card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.15);
+  transition: transform 0.8s var(--ease);
+}
+
+.hero__card span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.2rem 0.9rem 0.8rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  background: linear-gradient(to top, rgb(10 10 14 / 0.7), transparent);
+}
+
+@media (hover: hover) {
+  .hero__card:hover {
+    transform: translateY(-4px);
+  }
+  .hero__card:hover img {
+    transform: scale(1.06);
+  }
 }
 
 @media (max-width: 860px) {
-  .hero {
-    grid-template-columns: 1fr;
-    align-items: start;
-    padding-top: 6.5rem;
-    gap: var(--s-4);
+  .hero::before {
+    display: none;
   }
-  .hero__photo {
-    justify-self: start;
-    max-width: 70%;
-    margin-top: 0;
-    max-height: 48dvh;
+  .hero__bg img {
+    object-position: 22% 20%;
   }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 40% 0 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgb(238 237 234 / 0.94) 40%, rgb(238 237 234 / 0));
+    pointer-events: none;
+  }
+  .hero__copy {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    bottom: 2rem;
+  }
+  .hero__card {
+    display: none;
+  }
+}
+
+/* ---------- la piastra (scena 3D) ---------- */
+
+.stage {
+  position: relative;
+  z-index: 2;
+  height: 100dvh;
+  min-height: 560px;
+}
+
+.stage__card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 40%, #f7f6f4 0%, #ebeae7 70%, #e2e1de 100%);
+  clip-path: inset(34% 33% 0% 33% round 28px);
+  color: #111116;
+}
+
+.stage__word {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(9rem, 30vw, 34rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #fbfaf9;
+  text-shadow: 0 1px 0 rgb(17 17 22 / 0.04), 0 30px 80px rgb(17 17 22 / 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.stage__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stage__copy {
+  position: absolute;
+  opacity: 0;
+}
+
+.stage__copy--a {
+  left: var(--gutter);
+  top: clamp(6rem, 14vh, 9rem);
+  width: min(30vw, 480px);
+}
+
+.stage__copy--a .display {
+  font-size: clamp(2rem, 3.4vw, 3.6rem);
+}
+
+.stage__copy--b {
+  right: var(--gutter);
+  bottom: clamp(2rem, 8vh, 5rem);
+  max-width: 34ch;
+  color: #3a3a44;
+  border-top: 1px solid rgb(17 17 22 / 0.18);
+  padding-top: var(--s-2);
+}
+
+.stage__copy--b p {
+  margin: 0;
+}
+
+.stage .display em {
+  color: #6e1230;
+}
+
+@media (max-width: 767px) {
+  .stage__card {
+    clip-path: inset(38% 8% 0% 8% round 22px);
+  }
+  .stage__copy--a {
+    top: 5.5rem;
+    width: auto;
+    right: var(--gutter);
+  }
+  .stage__copy--b {
+    left: var(--gutter);
+    bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ---------- loader ---------- */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--bg);
+  pointer-events: none;
+  transition: opacity 0.9s var(--ease), visibility 0.9s;
+}
+
+.loader svg {
+  width: 100%;
+  height: 100%;
+}
+
+.loader path {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 0.6;
+  opacity: 0.55;
+  stroke-dasharray: 520;
+  stroke-dashoffset: 520;
+  animation: ciocca 1.6s var(--ease) forwards;
+}
+
+.loader path:nth-child(2) { animation-delay: 0.08s; }
+.loader path:nth-child(3) { animation-delay: 0.16s; }
+.loader path:nth-child(4) { animation-delay: 0.1s; }
+.loader path:nth-child(5) { animation-delay: 0.2s; }
+.loader path:nth-child(6) { animation-delay: 0.26s; }
+.loader path:nth-child(7) { animation-delay: 0.3s; }
+
+@keyframes ciocca {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+body:not(.is-loading) .loader {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ---------- manifesto ---------- */
@@ -539,7 +771,7 @@ main,
   }
 }
 
-/* ---------- servizi (sticky stack) ---------- */
+/* ---------- servizi (card impilate) ---------- */
 
 .servizi {
   max-width: var(--max);
@@ -560,7 +792,7 @@ main,
   background: var(--bg-2);
   margin-bottom: 8dvh;
   transform-origin: 50% 0;
-  box-shadow: 0 30px 80px -40px rgb(17 17 22 / 0.35);
+  box-shadow: 0 24px 48px -32px rgb(17 17 22 / 0.3);
 }
 
 .stack__media {
@@ -748,7 +980,7 @@ main,
 }
 
 .info h3 .ph {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--accent-text);
 }
 
@@ -865,7 +1097,7 @@ main,
   font-size: 0.8rem;
 }
 
-/* ---------- reduced motion ---------- */
+/* ---------- movimento ridotto ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   .manifesto__text .w {
@@ -878,9 +1110,18 @@ main,
   .salone__caption {
     opacity: 1;
   }
-  .hero__photo img,
   .panel--photo img {
     transform: none;
+  }
+  .stage__card {
+    clip-path: none;
+  }
+  .stage__copy {
+    opacity: 1;
+  }
+  .loader path {
+    animation: none;
+    stroke-dashoffset: 0;
   }
   .btn,
   .btn::after,

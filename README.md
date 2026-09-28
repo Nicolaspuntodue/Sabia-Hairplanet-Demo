@@ -1,57 +1,61 @@
-# Sabia Hair Planet, demo concept
+# Sabia Hair Planet, demo di concept
 
-A scroll-driven homepage concept for **Sabia Hair Planet**, a hair salon at Via Raffaello Sanzio 13, Pescara.
-Built with Vite, Three.js (custom GLSL), GSAP ScrollTrigger and Lenis.
+Homepage "scroll driven" per **Sabia Hair Planet**, salone di parrucchiera in via Raffaello Sanzio 13 a Pescara.
+Realizzata con Vite, Three.js (shader GLSL su misura), GSAP ScrollTrigger e Lenis.
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # output in dist/, deployable on Netlify (see netlify.toml)
+npm run build    # cartella dist/, pubblicabile su Netlify (vedi netlify.toml)
 ```
 
-## What we know about the business (public sources)
+## Cosa sappiamo del salone (fonti pubbliche)
 
-- Owner: Sabia Casciato. The brief says she actively works the fashion weeks (Milan, London and others).
-- Certified **Great Lengths** extensions salon (real-hair extensions), plus cutting, colour and styling.
-- Phone 085 76102, WhatsApp 329 8403364, Instagram and Facebook `@sabiahairplanet`.
-- Hours: Tue-Fri 8:30-12:30 / 15:30-19:30, Sat 8:30-19:30, closed Sun-Mon. One source lists closing at 20:00, so **check with the client**.
-- Google rating 4.7/5 (about 38 reviews). Wheelchair-accessible entrance, restroom and parking.
-- The official website (business.site) is offline.
+- Titolare: Sabia Casciato. Dal brief sappiamo che partecipa attivamente alle fashion week (Milano, Londra e altre).
+- Salone certificato per le **extensions Great Lengths** (capelli veri), oltre a taglio, colore, piega e acconciature.
+- Telefono 085 76102, WhatsApp 329 8403364, Instagram e Facebook `@sabiahairplanet`.
+- Orari: mar-ven 8:30-12:30 / 15:30-19:30, sabato 8:30-19:30, chiuso domenica e lunedì. Una fonte indica chiusura alle 20:00: **da verificare con la cliente**.
+- Google: 4,7/5 (circa 38 recensioni). Ingresso, bagno e parcheggio accessibili in sedia a rotelle.
 
-Sources: extensions-capelli.it (Great Lengths salon directory), Fresha listing, Facebook page, local directories.
+Fonti: elenco saloni Great Lengths (extensions-capelli.it), scheda Fresha, pagina Facebook, directory locali.
 
-## Design direction
+## Direzione visiva
 
-**Design read:** a fashion-editorial landing page for style-conscious clients in Pescara, in a runway/backstage language.
-Dials: variance 8, motion 8, density 3.
+**Palette** (volutamente diversa dalla demo di Luca Santilli, scura con rame e marroni):
 
-**Palette** (deliberately different from the Luca Santilli demo, which is dark with copper and brown tones):
-
-| Token | Light | Dark |
+| Token | Chiaro | Scuro |
 |---|---|---|
-| Background, cool pearl | `#eeedea` | `#0e0e12` |
-| Ink, blue-black | `#111116` | `#edece8` |
-| Accent, couture bordeaux | `#6e1230` | `#8a1a40` / text `#e58aa6` |
-| Innovation touch | iridescent pearl (lilac, aqua, blush), used only on the WebGL planet and on hover sheens | same |
+| Sfondo, perla fredda | `#eeedea` | `#0e0e12` |
+| Inchiostro blu-nero | `#111116` | `#edece8` |
+| Accento, bordeaux couture | `#6e1230` | `#8a1a40` / testo `#e58aa6` |
+| Tocco innovativo | riflesso perlato iridescente sugli hover e sulle piastre in titanio | idem |
 
-**Type:** Bodoni Moda (variable, optical-size axis) for display, the typeface of fashion magazines. Jost for body text.
-**Shape rule:** images are sharp-cornered, interactive controls are full pills.
-**Spacing scale:** 8 / 16 / 24 / 40 / 64 / 104 / 168 px.
+**Tipografia:** Bodoni Moda (variabile, asse optical size) per i titoli, Jost per i testi.
+**Spaziature:** 8 / 16 / 24 / 40 / 64 / 104 / 168 px.
 
-**Inspiration** (Awwwards salon/beauty nominees): Gielly Green London (ivory and bordeaux luxury), Qiqi (oversized editorial type over portraits), Marco Ambrosi Salon (an Italian extensions and colour stylist, GSAP-driven).
+**Ispirazione:** [clingr.me](https://clingr.me/en/): loader a ciocche, hero a tutta pagina con foto e tipografia leggera, card bianca che sale e si apre a schermo intero sul prodotto 3D davanti a un grande wordmark. Inoltre, dai candidati Awwwards: Gielly Green, Qiqi, Marco Ambrosi Salon.
 
-## Scroll story
+## Il racconto dello scroll
 
-1. **Hero:** a liquid-pearl planet with thin-film iridescence, orbited by Saturn-like rings made of 2,600 individual hair strands.
-2. **Manifesto:** pinned. Words light up as you scroll, and the planet grows behind them.
-3. **Backstage:** vertical scroll turns into a horizontal pan through Milan, London and Pescara.
-4. **Services:** a sticky card stack (cut, colour, styling).
-5. **Great Lengths extensions:** the ring strands peel off and fall as a long curtain of hair, and the real photo unrolls over them.
-6. **Salon:** a pinned window opens onto the whole room.
-7. **Visit:** address, hours, WhatsApp and phone, Google rating.
+1. **Loader:** sottili ciocche che convergono.
+2. **Hero:** foto a tutta pagina, titolo in Bodoni e una piccola card "Dal backstage".
+3. **La piastra:** una card sale sopra la hero e si apre a schermo intero. La piastra 3D si chiude su una ciocca di 1.100 capelli e scorre dalle radici alle punte: i capelli passano da crespi e opachi a lisci e a specchio, con il vapore e le piastre che si scaldano.
+4. **Manifesto:** le parole si accendono una alla volta.
+5. **Backstage:** scorrimento orizzontale tra Milano, Londra e Pescara.
+6. **Servizi:** card impilate (taglio, colore, piega e acconciature).
+7. **Extensions Great Lengths:** la foto si srotola come una ciocca lunga.
+8. **Salone:** la finestra si apre sulla sala con vista mare.
+9. **Contatti:** WhatsApp, telefono, orari e voto Google.
 
-Supports `prefers-reduced-motion` (no pins, no smooth scroll, static planet) and `prefers-color-scheme` (full dark theme, including shader colours). Works without WebGL too.
+## Prestazioni
 
-## Images
+- Three.js viene scaricato solo quando la sezione della piastra si avvicina (import dinamico): il bundle iniziale passa da 675 kB a 142 kB.
+- Il WebGL vive solo dentro la card e il rendering si ferma quando la sezione non è visibile o la scheda è in background.
+- Su mobile: meno capelli (520 invece di 1.100), pixel ratio massimo 1,5, niente grana e niente blur dietro la nav.
+- Icone Phosphor come SVG ufficiali inline (6 icone) al posto del font di icone (circa 230 kB in meno).
+- Immagini WebP con varianti da 800 px per mobile (`srcset`).
+- Rispetta `prefers-reduced-motion` e `prefers-color-scheme`, e funziona anche senza WebGL.
 
-The 6 images in `public/img` are AI-generated (Higgsfield Soul 2), used for illustration only. Replace them with the salon's real photos (backstage, work, interior) before going live.
+## Immagini
+
+Le immagini in `public/img` sono generate con Higgsfield Soul 2, a scopo illustrativo. Prima della pubblicazione vanno sostituite con le foto reali del salone: backstage, lavori, interni.
