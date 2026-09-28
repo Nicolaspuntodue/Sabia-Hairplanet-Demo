@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sabia Hair Planet | Parrucchiera a Pescara</title>
+    <meta
+      name="description"
+      content="Sabia Hair Planet, via Raffaello Sanzio 13 a Pescara. Taglio, colore, styling ed extensions Great Lengths, con l'esperienza dei backstage delle fashion week."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#eeedea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="/img/backstage.webp" />
+  </head>
+  <body>
+    <canvas id="planet" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="nav" id="nav">
+      <a class="nav__logo" href="#top" aria-label="Sabia Hair Planet, torna all'inizio">
+        <span class="nav__mark">Sabia</span>
+        <span class="nav__sub">Hair Planet</span>
+      </a>
+      <nav aria-label="Principale">
+        <ul class="nav__links">
+          <li><a href="#backstage">Backstage</a></li>
+          <li><a href="#servizi">Servizi</a></li>
+          <li><a href="#extensions">Extensions</a></li>
+          <li><a href="#salone">Salone</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn--solid btn--sm" href="#visita">Prenota</a>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero" id="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">Parrucchiera a Pescara</p>
+          <h1 class="hero__title">
+            <span class="line"><span class="split">Sabia</span></span>
+            <span class="line line--italic"><span class="split">Hair Planet</span></span>
+          </h1>
+          <p class="hero__lead">
+            Dai backstage delle fashion week di Milano e Londra al tuo specchio, in via Raffaello a Pescara.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--solid" href="#visita">Prenota</a>
+            <a class="btn btn--ghost" href="#backstage">Il backstage</a>
+          </div>
+        </div>
+        <figure class="hero__photo">
+          <img src="/img/backstage.webp" width="1536" height="2048" alt="Una hairstylist sistema un raccolto scolpito a una modella nel backstage di una sfilata" fetchpriority="high" />
+        </figure>
+      </section>
+
+      <!-- MANIFESTO -->
+      <section class="manifesto" id="manifesto" aria-label="La filosofia del salone">
+        <p class="manifesto__text" data-words>
+          Ogni stagione Sabia lavora dietro le quinte delle passerelle. Quello che vede nascere lì, lo riporta a Pescara e lo adatta a te: al tuo viso, al tuo ritmo, ai tuoi capelli.
+        </p>
+      </section>
+
+      <!-- BACKSTAGE, horizontal pan -->
+      <section class="backstage" id="backstage">
+        <div class="backstage__track">
+          <div class="panel panel--intro">
+            <h2 class="display">Il backstage<br /><em>è la nostra scuola.</em></h2>
+            <p class="body">
+              La titolare partecipa attivamente alle fashion week, da Milano a Londra. Tecniche, tempi e tendenze arrivano in salone di prima mano.
+            </p>
+          </div>
+          <figure class="panel panel--photo">
+            <img src="/img/backstage.webp" width="1536" height="2048" loading="lazy" alt="Preparazione delle acconciature nel backstage prima della sfilata" />
+          </figure>
+          <div class="panel panel--cities" aria-label="Le città delle sfilate">
+            <span class="city">Milano</span>
+            <span class="city city--outline">Londra</span>
+            <span class="city">Pescara</span>
+          </div>
+          <figure class="panel panel--photo panel--tall">
+            <img src="/img/runway.webp" width="1536" height="2048" loading="lazy" alt="Modella in passerella con una treccia lucida e un look nero sartoriale" />
+          </figure>
+          <div class="panel panel--note">
+            <p class="display display--sm">
+              Visto in passerella,<br />pensato per la vita vera.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVIZI, sticky stack -->
+      <section class="servizi" id="servizi">
+        <h2 class="display servizi__title">Servizi</h2>
+        <div class="stack">
+          <article class="stack__card">
+            <div class="stack__media"><img src="/img/taglio.webp" width="1536" height="2048" loading="lazy" alt="Mani della parrucchiera con pettine e forbici durante un taglio di precisione" /></div>
+            <div class="stack__body">
+              <h3>Taglio</h3>
+              <p>Linee pulite, studiate sulla forma del viso e sulla texture del capello. Un taglio che resta bello anche a casa.</p>
+            </div>
+          </article>
+          <article class="stack__card">
+            <div class="stack__media"><img src="/img/bob.webp" width="1536" height="2048" loading="lazy" alt="Ritratto di donna con un bob netto color bordeaux" /></div>
+            <div class="stack__body">
+              <h3>Colore</h3>
+              <p>Dai naturali alle nuance di tendenza viste in passerella. Colore su misura, lucido e rispettoso della fibra.</p>
+            </div>
+          </article>
+          <article class="stack__card">
+            <div class="stack__media"><img src="/img/runway.webp" width="1536" height="2048" loading="lazy" alt="Treccia lucida da sfilata vista di spalle" /></div>
+            <div class="stack__body">
+              <h3>Styling e acconciature</h3>
+              <p>Raccolti, onde e look da evento con la precisione del backstage. Per cerimonie, serate e shooting.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- EXTENSIONS -->
+      <section class="extensions" id="extensions">
+        <div class="extensions__copy">
+          <p class="eyebrow">Salone certificato</p>
+          <h2 class="display">Extensions<br /><em>Great Lengths.</em></h2>
+          <p class="body">
+            Capelli veri, applicati da un'applicatrice certificata Great Lengths. Lunghezza e volume che si muovono come i tuoi, senza compromessi.
+          </p>
+          <a class="btn btn--ghost" href="#visita">Chiedi una consulenza</a>
+        </div>
+        <figure class="extensions__photo">
+          <img src="/img/extensions.webp" width="1536" height="2048" loading="lazy" alt="Capelli lunghissimi, lucidi e castani in movimento" />
+        </figure>
+      </section>
+
+      <!-- SALONE -->
+      <section class="salone" id="salone">
+        <figure class="salone__frame">
+          <img src="/img/salone.webp" width="1600" height="900" loading="lazy" alt="Interno del salone con poltrone nere, specchi e una panca in velluto bordeaux" />
+        </figure>
+        <div class="salone__caption">
+          <h2 class="display">Un pianeta tutto tuo,<br /><em>a due passi dal mare.</em></h2>
+        </div>
+      </section>
+
+      <!-- VISITA -->
+      <section class="visita" id="visita">
+        <h2 class="display visita__title">Vieni a trovarci</h2>
+        <div class="visita__grid">
+          <div class="info">
+            <h3><i class="ph ph-map-pin" aria-hidden="true"></i> Indirizzo</h3>
+            <p>Via Raffaello Sanzio, 13<br />65124 Pescara</p>
+            <a class="link" href="https://www.google.com/maps/search/?api=1&query=Sabia+Hair+Planet+Via+Raffaello+Sanzio+13+Pescara" target="_blank" rel="noopener">Apri in Maps</a>
+          </div>
+          <div class="info">
+            <h3><i class="ph ph-clock" aria-hidden="true"></i> Orari</h3>
+            <dl class="hours">
+              <dt>Mar - Ven</dt><dd>8:30 - 12:30<br />15:30 - 19:30</dd>
+              <dt>Sabato</dt><dd>8:30 - 19:30</dd>
+              <dt>Dom - Lun</dt><dd>Chiuso</dd>
+            </dl>
+          </div>
+          <div class="info info--cta">
+            <h3><i class="ph ph-calendar-check" aria-hidden="true"></i> Prenota</h3>
+            <p>Scrivici o chiamaci: troviamo insieme il momento giusto.</p>
+            <div class="info__actions">
+              <a class="btn btn--solid" href="https://wa.me/393298403364" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i> WhatsApp</a>
+              <a class="btn btn--ghost" href="tel:+3908576102"><i class="ph ph-phone" aria-hidden="true"></i> 085 76102</a>
+            </div>
+          </div>
+          <div class="info info--rating">
+            <p class="rating"><span class="rating__num">4,7</span><span class="rating__of">/5</span></p>
+            <p>Media delle recensioni su Google. Le clienti premiano professionalità e cortesia.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p class="footer__mark">Sabia <em>Hair Planet</em></p>
+      <p>Via Raffaello Sanzio 13, Pescara</p>
+      <p>Salone accessibile in sedia a rotelle</p>
+      <p class="footer__demo">Demo concept. Immagini generate a scopo illustrativo.</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
