@@ -920,32 +920,28 @@ body:not(.is-loading) .loader {
   color: #f1c9d5;
 }
 
+/* su mobile stessa animazione: la foto riempie lo schermo in verticale,
+   inquadrando la finestra sul mare e il divano bordeaux */
 @media (max-width: 767px) {
   .salone {
-    min-height: auto;
-    padding: var(--s-6) 0;
-  }
-  .salone__frame::after {
-    display: none;
+    height: 100dvh;
+    min-height: 560px;
   }
   .salone__frame {
-    position: static;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    clip-path: none;
+    clip-path: inset(30% 10% 30% 10%);
   }
-  .salone {
-    display: block;
+  .salone__frame img {
+    object-position: 100% 50%;
+  }
+  .salone__frame::after {
+    background: linear-gradient(to top, rgb(10 10 14 / 0.7), rgb(10 10 14 / 0) 60%);
   }
   .salone__caption {
-    position: static;
-    opacity: 1;
-    color: var(--ink);
-    text-shadow: none;
-    padding: var(--s-4) var(--gutter) 0;
+    right: var(--gutter);
+    bottom: var(--s-4);
   }
-  .salone__caption .display em {
-    color: var(--accent-text);
+  .salone__caption .display {
+    font-size: clamp(2rem, 9vw, 2.6rem);
   }
 }
 

@@ -214,11 +214,14 @@ if (reduced) {
       ease: 'expo.out',
       scrollTrigger: { trigger: '.panel--cities', containerAnimation: pan, start: 'left 80%', end: 'left 30%', scrub: true },
     });
+  });
 
-    // salone: la finestra si apre su tutta la sala
+  // salone: la finestra si apre su tutta la sala, su desktop e su mobile
+  mm.add({ small: '(max-width: 767px)', large: '(min-width: 768px)' }, (ctx) => {
+    const start = ctx.conditions.small ? 'inset(30% 10% 30% 10%)' : 'inset(24% 27% 24% 27%)';
     gsap
-      .timeline({ scrollTrigger: { trigger: '.salone', start: 'top top', end: '+=120%', pin: true, scrub: 0.8 } })
-      .fromTo('.salone__frame', { clipPath: 'inset(24% 27% 24% 27%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.inOut', duration: 1 })
+      .timeline({ scrollTrigger: { trigger: '.salone', start: 'top top', end: ctx.conditions.small ? '+=90%' : '+=120%', pin: true, scrub: 0.8 } })
+      .fromTo('.salone__frame', { clipPath: start }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.inOut', duration: 1 })
       .fromTo('.salone__frame img', { scale: 1.25 }, { scale: 1, ease: 'power2.inOut', duration: 1 }, 0)
       .to('.salone__caption', { opacity: 1, duration: 0.3 }, 0.75);
   });
